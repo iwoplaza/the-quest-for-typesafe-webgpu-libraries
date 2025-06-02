@@ -34,7 +34,7 @@ const mainVertex = tgpu["~unstable"].vertexFn({
     d.vec2f(1, 1),
   ];
 
-  const particleSize = 0.1;
+  const particleSize = 0.01;
   const billboardPos = d.vec3f(std.mul(particleSize, pos[input.vid]!), 0.0);
   const globalPos = std.add(point, billboardPos);
 
@@ -81,7 +81,7 @@ export async function initXyzPlot(options: Options) {
   const depthView = depthTexture.createView();
 
   async function plot3d(points: [number, number, number][]): Promise<void> {
-    const viewMat = mat4.lookAt(d.vec3f(0, 2, 5), d.vec3f(0), d.vec3f(0, 1, 0), d.mat4x4f());
+    const viewMat = mat4.lookAt(d.vec3f(0, 0.5, 1.5), d.vec3f(0), d.vec3f(0, 1, 0), d.mat4x4f());
     // const viewMat = mat4.identity(d.mat4x4f());
     const projMat = mat4.perspective(60 / 180 * Math.PI, 1, 0.001, 1000, d.mat4x4f());
 
@@ -106,7 +106,7 @@ export async function initXyzPlot(options: Options) {
       .with(layout, group)
       .withColorAttachment({
         view: context.getCurrentTexture().createView(),
-        clearValue: [1, 0, 0, 1],
+        clearValue: [0, 0, 0, 1],
         loadOp: "clear",
         storeOp: "store",
       })
