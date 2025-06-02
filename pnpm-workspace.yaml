@@ -1,0 +1,9 @@
+packages:
+  - "packages/*"
+  - "apps/*"
+
+catalog:
+  typegpu: ^0.5.8
+  unplugin-typegpu: ^0.1.2
+  typescript: ^5.8.3
+  vite: ^6.3.5

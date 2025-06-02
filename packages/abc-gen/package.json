@@ -1,0 +1,15 @@
+{
+  "name": "abc-gen",
+  "version": "0.0.0",
+  "description": "An example library for generating procedural data.",
+  "exports": "./index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Iwo Plaza",
+  "license": "MIT",
+  "dependencies": {
+    "typegpu": "catalog:",
+    "unplugin-typegpu": "catalog:"
+  }
+}
