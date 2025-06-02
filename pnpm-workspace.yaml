@@ -7,3 +7,4 @@ catalog:
   unplugin-typegpu: ^0.1.2
   typescript: ^5.8.3
   vite: ^6.3.5
+  "@webgpu/types": ^0.1.61

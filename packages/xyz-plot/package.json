@@ -10,6 +10,10 @@
   "license": "MIT",
   "dependencies": {
     "typegpu": "catalog:",
-    "unplugin-typegpu": "catalog:"
+    "unplugin-typegpu": "catalog:",
+    "wgpu-matrix": "^3.4.0"
+  },
+  "devDependencies": {
+    "@webgpu/types": "catalog:"
   }
 }

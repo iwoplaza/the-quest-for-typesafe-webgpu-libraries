@@ -8,8 +8,14 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
+  "dependencies": {
+    "abc-gen": "workspace:",
+    "typegpu": "catalog:",
+    "xyz-plot": "workspace:"
+  },
   "devDependencies": {
     "typescript": "catalog:",
+    "unplugin-typegpu": "catalog:",
     "vite": "catalog:"
   }
 }

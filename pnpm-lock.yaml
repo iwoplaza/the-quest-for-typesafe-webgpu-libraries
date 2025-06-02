@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@webgpu/types':
+      specifier: ^0.1.61
+      version: 0.1.61
     typegpu:
       specifier: ^0.5.8
       version: 0.5.8
@@ -26,12 +29,29 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
+    devDependencies:
+      '@webgpu/types':
+        specifier: 'catalog:'
+        version: 0.1.61
 
   apps/example-app:
+    dependencies:
+      abc-gen:
+        specifier: 'workspace:'
+        version: link:../../packages/abc-gen
+      typegpu:
+        specifier: 'catalog:'
+        version: 0.5.8
+      xyz-plot:
+        specifier: 'workspace:'
+        version: link:../../packages/xyz-plot
     devDependencies:
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
+      unplugin-typegpu:
+        specifier: 'catalog:'
+        version: 0.1.2(typegpu@0.5.8)
       vite:
         specifier: 'catalog:'
         version: 6.3.5
@@ -44,6 +64,10 @@ importers:
       unplugin-typegpu:
         specifier: 'catalog:'
         version: 0.1.2(typegpu@0.5.8)
+    devDependencies:
+      '@webgpu/types':
+        specifier: 'catalog:'
+        version: 0.1.61
 
   packages/xyz-plot:
     dependencies:
@@ -53,6 +77,13 @@ importers:
       unplugin-typegpu:
         specifier: 'catalog:'
         version: 0.1.2(typegpu@0.5.8)
+      wgpu-matrix:
+        specifier: ^3.4.0
+        version: 3.4.0
+    devDependencies:
+      '@webgpu/types':
+        specifier: 'catalog:'
+        version: 0.1.61
 
 packages:
 
@@ -316,6 +347,9 @@ packages:
   '@types/estree@1.0.7':
     resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
 
+  '@webgpu/types@0.1.61':
+    resolution: {integrity: sha512-w2HbBvH+qO19SB5pJOJFKs533CdZqxl3fcGonqL321VHkW7W/iBo6H8bjDy6pr/+pbMwIu5dnuaAxH7NxBqUrQ==}
+
   acorn@8.14.1:
     resolution: {integrity: sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==}
     engines: {node: '>=0.4.0'}
@@ -452,6 +486,9 @@ packages:
 
   webpack-virtual-modules@0.6.2:
     resolution: {integrity: sha512-66/V2i5hQanC51vBQKPH4aI8NMAcBW59FVBs+rC7eGHupMyfn34q7rZIE+ETlJ+XTevqfUhVVBgSUNSW2flEUQ==}
+
+  wgpu-matrix@3.4.0:
+    resolution: {integrity: sha512-kXHrbAPKEn9A32Wf4wVldyx9MmnzwhuB5p8GCqoJP3ItU5+iDT4J3aTQwPZWkfb153hwGtqZtUwR2M+ipJKadg==}
 
 snapshots:
 
@@ -596,6 +633,8 @@ snapshots:
 
   '@types/estree@1.0.7': {}
 
+  '@webgpu/types@0.1.61': {}
+
   acorn@8.14.1: {}
 
   defu@6.1.4: {}
@@ -736,3 +775,5 @@ snapshots:
       fsevents: 2.3.3
 
   webpack-virtual-modules@0.6.2: {}
+
+  wgpu-matrix@3.4.0: {}

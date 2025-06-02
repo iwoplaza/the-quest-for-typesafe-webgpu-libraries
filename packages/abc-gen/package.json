@@ -11,5 +11,8 @@
   "dependencies": {
     "typegpu": "catalog:",
     "unplugin-typegpu": "catalog:"
+  },
+  "devDependencies": {
+    "@webgpu/types": "catalog:"
   }
 }

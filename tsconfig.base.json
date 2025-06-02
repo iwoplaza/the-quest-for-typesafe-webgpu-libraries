@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "${configDir}/dist",
+    "baseUrl": "${configDir}",
+    "declaration": true,
+    "declarationMap": true,
+    "lib": ["ESNext", "DOM"],
+    "emitDeclarationOnly": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "allowImportingTsExtensions": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "moduleResolution": "bundler",
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "skipLibCheck": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "${configDir}/node_modules/@types",
+      "./node_modules/@webgpu/types"
+    ]
+  },
+  "exclude": ["${configDir}/dist", "${configDir}/node_modules"]
+}
