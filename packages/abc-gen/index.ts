@@ -4,7 +4,7 @@ export function generateHeightMap(size: readonly [number, number]): number[][] {
     () =>
       Array.from(
         { length: size[1] },
-        () => Math.random(),
+        () => 0,
       ),
   );
 }

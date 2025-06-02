@@ -18,7 +18,7 @@ const mainVertex = tgpu["~unstable"].vertexFn({
   in: { vid: d.builtin.vertexIndex, iid: d.builtin.instanceIndex },
   out: { pos: d.builtin.position, uv: d.vec2f },
 })((input) => {
-  const globalPos = layout.$.points[input.iid]!;
+  const point = layout.$.points[input.iid]!;
 
   const pos = [
     d.vec2f(-1, 1),
@@ -34,8 +34,12 @@ const mainVertex = tgpu["~unstable"].vertexFn({
     d.vec2f(1, 1),
   ];
 
+  const particleSize = 0.1;
+  const billboardPos = d.vec3f(std.mul(particleSize, pos[input.vid]!), 0.0);
+  const globalPos = std.add(point, billboardPos);
+
   return {
-    pos: std.mul(layout.$.viewProj, d.vec4f(pos[input.vid]!, -10.0, 1.0)),
+    pos: std.mul(layout.$.viewProj, d.vec4f(globalPos, 1.0)),
     uv: uv[input.vid]!,
   };
 });
@@ -61,13 +65,29 @@ export async function initXyzPlot(options: Options) {
   const pipeline = root["~unstable"]
     .withVertex(mainVertex, {})
     .withFragment(mainFragment, { format: presentationFormat })
-    .withPrimitive({ topology: 'triangle-strip' })
+    .withPrimitive({ topology: "triangle-strip" })
+    .withDepthStencil({
+      format: "depth24plus",
+      depthWriteEnabled: true,
+      depthCompare: "less",
+    })
     .createPipeline();
 
+  const depthTexture = root.device.createTexture({
+    size: [options.target.width, options.target.height, 1],
+    format: "depth24plus",
+    usage: GPUTextureUsage.RENDER_ATTACHMENT,
+  });
+  const depthView = depthTexture.createView();
+
   async function plot3d(points: [number, number, number][]): Promise<void> {
+    const viewMat = mat4.lookAt(d.vec3f(0, 2, 5), d.vec3f(0), d.vec3f(0, 1, 0), d.mat4x4f());
+    // const viewMat = mat4.identity(d.mat4x4f());
+    const projMat = mat4.perspective(60 / 180 * Math.PI, 1, 0.001, 1000, d.mat4x4f());
+
     const viewProjBuffer = root.createBuffer(
       d.mat4x4f,
-      mat4.perspective(60 / 180 * Math.PI, 1, -1, 1, d.mat4x4f()),
+      mat4.mul(projMat, viewMat, d.mat4x4f()),
     ).$usage("uniform");
 
     const pointsBuffer = root
@@ -89,7 +109,14 @@ export async function initXyzPlot(options: Options) {
         clearValue: [1, 0, 0, 1],
         loadOp: "clear",
         storeOp: "store",
-      }).draw(4);
+      })
+      .withDepthStencilAttachment({
+        view: depthView,
+        depthClearValue: 1,
+        depthLoadOp: 'clear',
+        depthStoreOp: 'store',
+      })
+      .draw(4, points.length);
 
     pointsBuffer.destroy();
   }
