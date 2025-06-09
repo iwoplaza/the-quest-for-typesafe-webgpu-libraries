@@ -1,7 +1,7 @@
 import tgpu from "typegpu";
 import { arrayOf, builtin, vec3f } from "typegpu/data";
-import { generateHeightMap } from "abc-gen/v2";
-import { initXyz } from "xyz-plot/v2";
+import { generateHeightMap } from "abc-gen/v3";
+import { initXyz } from "xyz-plot/v3";
 import { mul } from "typegpu/std";
 
 const root = await tgpu.init();
