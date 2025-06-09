@@ -1,9 +1,9 @@
-import tgpu from "typegpu";
+import tgpu, { isBuffer, StorageFlag, TgpuBuffer, TgpuRoot } from "typegpu";
 import * as d from "typegpu/data";
 import * as std from "typegpu/std";
 import { mat4 } from "wgpu-matrix";
 
-interface Options {
+export interface Options {
   target: HTMLCanvasElement;
   pointSize?: number;
 }
@@ -13,9 +13,7 @@ const PointsArray = (n: number) => d.arrayOf(d.vec3f, n);
 const staticPointSizeAccess = tgpu["~unstable"].accessor(d.f32);
 
 const getPointSizeSlot = tgpu["~unstable"].slot(
-  tgpu["~unstable"].fn([d.vec3f], d.f32)(() =>
-    staticPointSizeAccess.value
-  ),
+  tgpu["~unstable"].fn([d.vec3f], d.f32)(() => staticPointSizeAccess.value),
 );
 
 const layout = tgpu.bindGroupLayout({
@@ -64,10 +62,9 @@ const mainFragment = tgpu["~unstable"].fragmentFn({
   return d.vec4f(0, 0, 0, 1);
 });
 
-export async function initXyzPlot(options: Options) {
+export async function initXyz(root: TgpuRoot, options: Options) {
   const { target, pointSize = 0.001 } = options;
 
-  const root = await tgpu.init();
   const context = target.getContext("webgpu") as GPUCanvasContext;
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
 
@@ -97,7 +94,9 @@ export async function initXyzPlot(options: Options) {
   const depthView = depthTexture.createView();
 
   async function plot3d(
-    points: readonly (readonly [number, number, number])[],
+    points:
+      | readonly (readonly [number, number, number])[]
+      | TgpuBuffer<d.WgslArray<d.Vec3f>> & StorageFlag,
   ): Promise<void> {
     const viewMat = mat4.lookAt(
       d.vec3f(0, 0.5, 1.5),
@@ -119,17 +118,34 @@ export async function initXyzPlot(options: Options) {
       mat4.mul(projMat, viewMat, d.mat4x4f()),
     ).$usage("uniform");
 
-    const pointsBuffer = root
-      .createBuffer(
-        PointsArray(points.length),
-        points.map(([x, y, z]) => d.vec3f(x, y, z)),
-      )
-      .$usage("storage");
+    const uploadStart = performance.now();
+
+    let ownBuffer = !isBuffer(points);
+    const pointsBuffer: TgpuBuffer<d.WgslArray<d.Vec3f>> & StorageFlag = (() => {
+      if (isBuffer(points)) {
+        return points;
+      }
+
+      const initial = points.flatMap(([x, y, z]) => [x, y, z, 0]);
+
+      const flatBuffer = root
+        .createBuffer(d.arrayOf(d.f32, points.length * 4), initial)
+        .$usage("storage");
+
+      return root
+        .createBuffer(PointsArray(points.length), root.unwrap(flatBuffer))
+        .$usage("storage");
+    })();
+
+    const pointCount = isBuffer(points)
+      ? points.dataType.elementCount
+      : points.length;
 
     const group = root.createBindGroup(layout, {
       viewProj: viewProjBuffer,
       points: pointsBuffer,
     });
+
 
     pipeline
       .with(layout, group)
@@ -145,9 +161,17 @@ export async function initXyzPlot(options: Options) {
         depthLoadOp: "clear",
         depthStoreOp: "store",
       })
-      .draw(4, points.length);
+      .draw(4, pointCount);
 
-    pointsBuffer.destroy();
+    await root.device.queue.onSubmittedWorkDone();
+
+    const uploadEnd = performance.now();
+    console.log(`Upload took ${uploadEnd - uploadStart}ms`);
+
+    if (ownBuffer) {
+      // We created the buffer, so we destroy it.
+      pointsBuffer.destroy();
+    }
   }
 
   return {

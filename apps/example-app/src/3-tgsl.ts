@@ -1,26 +1,32 @@
-import { generateHeightMap } from "abc-gen/gpu";
-import { initXyzPlot } from "xyz-plot/gpu";
+import tgpu from "typegpu";
+import { arrayOf, builtin, vec3f } from "typegpu/data";
+import { generateHeightMap } from "abc-gen/v2";
+import { initXyz } from "xyz-plot/v2";
+
+const root = await tgpu.init();
 
 const SIZE = 2048;
-const terrain = await generateHeightMap(root, [SIZE, SIZE]);
+const terrain = generateHeightMap(root, [SIZE, SIZE]);
 const terrainReadonly = terrain.as('readonly');
 //    ^?
 
-const pointsMutable = root.createMutable(arrayOf(vec3f));
-const transformShader = tgpu.computeFn({
+const pointsBuffer = root.createBuffer(arrayOf(vec3f, SIZE * SIZE)).$usage('storage');
+const points = pointsBuffer.as('mutable');
+const transformShader = tgpu['~unstable'].computeFn({
+  workgroupSize: [1, 1],
   in: { id: builtin.globalInvocationId },
 })(({ id }) => {
   const idx = id.y * SIZE + id.x;
-  pointsMutable.value[idx] = terrainReadonly.value[id.x][id.y];
+  points.value[idx] = vec3f(id.x, terrainReadonly.value[id.x][id.y], id.y);
 });
 
-root
+root["~unstable"]
   .withCompute(transformShader)
   .createPipeline()
-  .dispatchWorkgroups([SIZE, SIZE]);
+  .dispatchWorkgroups(SIZE, SIZE);
 
-const xyz = await initXyzPlot(root, { target: getCanvas() });
-xyz.plot3d(pointsMutable);
+const xyz = await initXyz(root, { target: getCanvas(), pointSize: 0.001 });
+xyz.plot3d(pointsBuffer);
 
 // Helpers
 

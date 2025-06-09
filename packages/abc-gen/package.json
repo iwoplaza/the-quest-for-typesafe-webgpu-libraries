@@ -3,9 +3,8 @@
   "version": "0.0.0",
   "description": "An example library for generating procedural data.",
   "exports": {
-    ".": "./index.ts",
-    "./typed": "./typed.ts",
-    "./gpu": "./gpu.ts"
+    ".": "./v1.ts",
+    "./v2": "./v2.ts"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
