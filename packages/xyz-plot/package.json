@@ -2,7 +2,10 @@
   "name": "xyz-plot",
   "version": "0.0.0",
   "description": "An example library for plotting/displaying data.",
-  "exports": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./typed": "./typed.ts"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -58,6 +58,9 @@ importers:
 
   packages/abc-gen:
     dependencies:
+      '@typegpu/noise':
+        specifier: ^0.0.8
+        version: 0.0.8(typegpu@0.5.8)
       typegpu:
         specifier: 'catalog:'
         version: 0.5.8
@@ -343,6 +346,11 @@ packages:
     resolution: {integrity: sha512-Wq2zpapRYLfi4aKxf2Xff0tN+7slj2d4R87WEzqw7ZLsVvO5zwYCIuEGSZYiK41+GlwUo1HiR+GdkLEJnCKTCw==}
     cpu: [x64]
     os: [win32]
+
+  '@typegpu/noise@0.0.8':
+    resolution: {integrity: sha512-bl6kN1YgCuaFEIh/vx4q1Hdx5X6AUPwQVinMzWCRC8XnPmFWfuUclr544IA8pvokgQDuIQH5IJAnNCILUCnwJw==}
+    peerDependencies:
+      typegpu: ^0.5.8
 
   '@types/estree@1.0.7':
     resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
@@ -630,6 +638,10 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.41.1':
     optional: true
+
+  '@typegpu/noise@0.0.8(typegpu@0.5.8)':
+    dependencies:
+      typegpu: 0.5.8
 
   '@types/estree@1.0.7': {}
 

@@ -1,3 +1,3 @@
 import './style.css'
 
-import './0-cpu-only.ts';
+import './1-through-cpu.ts';
