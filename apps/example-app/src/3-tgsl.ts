@@ -2,6 +2,7 @@ import tgpu from "typegpu";
 import { arrayOf, builtin, vec3f } from "typegpu/data";
 import { generateHeightMap } from "abc-gen/v2";
 import { initXyz } from "xyz-plot/v2";
+import { mul } from "typegpu/std";
 
 const root = await tgpu.init();
 
@@ -10,14 +11,20 @@ const terrain = generateHeightMap(root, [SIZE, SIZE]);
 const terrainReadonly = terrain.as('readonly');
 //    ^?
 
+const s = 1 / (SIZE - 1);
+
 const pointsBuffer = root.createBuffer(arrayOf(vec3f, SIZE * SIZE)).$usage('storage');
 const points = pointsBuffer.as('mutable');
 const transformShader = tgpu['~unstable'].computeFn({
   workgroupSize: [1, 1],
   in: { id: builtin.globalInvocationId },
 })(({ id }) => {
+  const point = vec3f(id.x, terrainReadonly.value[id.x][id.y], id.y);
   const idx = id.y * SIZE + id.x;
-  points.value[idx] = vec3f(id.x, terrainReadonly.value[id.x][id.y], id.y);
+  // -1 to 1
+  const norm = vec3f(point.x * s - 0.5, point.y * s, point.z * s - 0.5);
+  // Scaling up
+  points.value[idx] = mul(norm, 25);
 });
 
 root["~unstable"]
