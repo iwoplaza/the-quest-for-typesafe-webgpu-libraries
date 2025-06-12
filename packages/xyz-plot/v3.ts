@@ -174,19 +174,21 @@ export async function initXyz(root: TgpuRoot, options: Options) {
 
     await root.device.queue.onSubmittedWorkDone();
 
-    const uploadEnd = performance.now();
-    console.log(`Upload took ${uploadEnd - uploadStart}ms`);
+    performance.measure('🫐 upload', { start: uploadStart });
 
     if (ownBuffer) {
       // We created the buffer, so we destroy it.
       pointsBuffer.destroy();
     }
+
+    viewProjBuffer.destroy();
+
   }
 
   return {
     plot3d,
     destroy() {
-      root.destroy();
+      depthTexture.destroy();
     },
   };
 }

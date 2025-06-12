@@ -24,20 +24,32 @@ export default async function main() {
 
   const s = 1 / (SIZE - 1);
 
-  const transformStart = performance.now();
   dispatch2d(root, [SIZE, SIZE], (x, y) => {
     "kernel";
     const height = terrain.value[x][y];
     let point = vec3f(x, height, y);
-    // -1 to 1
     point = vec3f(point.x * s - 0.5, point.y * s, point.z * s - 0.5);
-    // Scaling up
     point = mul(point, 25);
     points.value[y * SIZE + x] = point;
   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   root["~unstable"].flush();
   await root.device.queue.onSubmittedWorkDone();
-  performance.measure('🫐 transform', { start: transformStart });
+  // performance.measure('🫐 transform', { start: transformStart });
 
   await xyz.plot3d(pointsBuffer);
 

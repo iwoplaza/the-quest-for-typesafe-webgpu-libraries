@@ -9,8 +9,19 @@
   <body>
     <div id="app">
       <div>
-        <h1>The quest for type-safe WebGPU libraries</h1>
+        <header class="header">
+          <div>
+            <h1>The quest for type-safe WebGPU libraries</h1>
+            <button type="button" id="btn-version-1" class="">v1 - Through CPU</button>
+            <button type="button" id="btn-version-2" class="">v2 - GPU</button>
+            <button type="button" id="btn-version-3" class="">v3 - TGSL</button>
+            <button type="button" id="btn-version-4" class="">v4 - Customizable</button>
+          </div>
+        </header>
         <canvas id="canvas"></canvas>
+        <div class="stats-container">
+          <div id="stats"></div>
+        </div>
       </div>
     </div>
     <script type="module" src="/src/main.ts"></script>

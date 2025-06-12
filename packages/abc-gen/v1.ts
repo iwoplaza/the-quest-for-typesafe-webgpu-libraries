@@ -7,14 +7,12 @@ export async function generateHeightMap(size: readonly [number, number]): Promis
   const buffer = generateHeightMapGPU(root, size);
   root['~unstable'].flush();
   await root.device.queue.onSubmittedWorkDone();
-  const genEnd = performance.now();
+  performance.measure('🫐 generating', { start: genStart });
 
   const downloadStart = performance.now();
   const result = await buffer.read();
-  const downloadEnd = performance.now();
-
-  console.log(`Gen took ${genEnd - genStart}ms`);
-  console.log(`Download took ${downloadEnd - downloadStart}`);
+  performance.measure('🫐 download', { start: downloadStart });
+  buffer.destroy();
 
   return result;
 }

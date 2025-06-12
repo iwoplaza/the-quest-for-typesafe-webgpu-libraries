@@ -7,8 +7,7 @@ export async function generateHeightMap(device: GPUDevice, size: readonly [numbe
   const buffer = generateHeightMapGPU(root, size);
   root['~unstable'].flush();
   await root.device.queue.onSubmittedWorkDone();
-  const genEnd = performance.now();
+  performance.measure('🫐 generating', { start: genStart });
 
-  console.log(`Gen took ${genEnd - genStart}ms`);
   return root.unwrap(buffer);
 }
