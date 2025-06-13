@@ -118,8 +118,8 @@ button:focus-visible {
 
 #size-slider {
   position: fixed;
-  bottom: 1em;
-  right: 1em;
+  bottom: 3em;
+  right: 5em;
   z-index: 1001;
 }
 
