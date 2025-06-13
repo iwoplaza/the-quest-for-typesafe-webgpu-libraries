@@ -3,6 +3,7 @@ import { builtin, u32 } from "typegpu/data";
 
 export interface VersionOptions {
   root: TgpuRoot;
+  size: number;
 }
 
 export function dispatch2d(root: TgpuRoot, size: readonly [number, number], callback: (x: number, y: number) => void): void {

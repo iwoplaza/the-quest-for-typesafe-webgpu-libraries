@@ -1,13 +1,12 @@
 import { generateHeightMap } from "abc-gen";
 import { initXyz } from "xyz-plot";
-import { getCanvas } from "./helpers.ts";
+import { getCanvas, type VersionOptions } from "./helpers.ts";
 
-const SIZE = 2048;
+export default async function main({ root, size }: VersionOptions) {
+  const SIZE = 2 ** size;
+  const xyz = await initXyz(root, { target: getCanvas(), pointSize: 16/size**4 });
 
-export default async function main() {
-  const xyz = await initXyz({ target: getCanvas(), pointSize: 0.001 });
-
-  const terrain = await generateHeightMap([SIZE, SIZE]);
+  const terrain = await generateHeightMap(root, [SIZE, SIZE]);
   //    ^?
 
   const transformStart = performance.now();
@@ -18,15 +17,17 @@ export default async function main() {
     const z = Math.floor(idx / SIZE);
     const y = terrain[x][z];
     // -1 to 1
-    const norm = [x * s - 0.5, y * s, z * s - 0.5];
+    const norm = [x * s - 0.5, y, z * s - 0.5];
     // Scaling up
-    return norm.map((x) => x * 25) as [number, number, number];
+    return [norm[0] * 25, norm[1] * 0.01, norm[2] * 25] as const;
   });
 
   performance.measure('🫐 transform', { start: transformStart });
 
   await xyz.plot3d(points);
 
-  // Nothing to cleanup
-  return () => {};
+  // Cleanup function
+  return () => {
+    xyz.destroy();
+  };
 }

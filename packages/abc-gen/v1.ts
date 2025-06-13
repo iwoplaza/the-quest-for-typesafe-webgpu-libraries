@@ -1,8 +1,7 @@
-import tgpu from 'typegpu';
+import { TgpuRoot } from 'typegpu';
 import { generateHeightMap as generateHeightMapGPU } from './v3.ts';
 
-export async function generateHeightMap(size: readonly [number, number]): Promise<number[][]> {
-  const root = await tgpu.init();
+export async function generateHeightMap(root: TgpuRoot, size: readonly [number, number]): Promise<number[][]> {
   const genStart = performance.now();
   const buffer = generateHeightMapGPU(root, size);
   root['~unstable'].flush();

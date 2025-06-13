@@ -1,5 +1,9 @@
+import tgpu from "typegpu";
 import "./style.css";
 import { filter, join, map, pipe } from 'remeda';
+
+const stats = document.getElementById('stats') as HTMLDivElement;
+const sizeSlider = document.getElementById('size-slider') as HTMLInputElement;
 
 const versionRunners = {
   "1": await import("./1-through-cpu.ts").then((m) => m.default),
@@ -15,13 +19,16 @@ const versionButtons = {
   "4": document.getElementById("btn-version-4") as HTMLButtonElement,
 } as const;
 
-const stats = document.getElementById('stats') as HTMLDivElement;
+const root = await tgpu.init();
 
+let size = Number.parseInt(localStorage.getItem("size") ?? "8");
+sizeSlider.value = `${size}`;
 let currentVersion = Number.parseInt(localStorage.getItem("version") ?? "1") as
   | 1
   | 2
   | 3
   | 4;
+
 let cleanup: (() => void) | undefined;
 async function runVersion(v: 1 | 2 | 3 | 4): Promise<void> {
   cleanup?.();
@@ -31,7 +38,7 @@ async function runVersion(v: 1 | 2 | 3 | 4): Promise<void> {
 
   const start = performance.now();
   performance.mark(`version start`);
-  cleanup = await versionRunners[v]();
+  cleanup = await versionRunners[v]({ root, size });
   performance.mark(`version end`);
 
   performance.measure(`🫐 total time`, {
@@ -47,7 +54,6 @@ async function runVersion(v: 1 | 2 | 3 | 4): Promise<void> {
     map((entry) => `<li><span style="display: inline-block; min-width: 7em">${entry.name}:</span> ${entry.duration.toFixed(3)} ms</li>`),
     join(''),
   );
-  
 
   Object.values(versionButtons).forEach((btn) =>
     btn.classList.remove("active")
@@ -59,6 +65,12 @@ Object.entries(versionButtons).forEach(([v, btn]) => {
   btn.addEventListener("click", () => {
     runVersion(Number.parseInt(v) as 1 | 2 | 3 | 4);
   });
+});
+
+sizeSlider.addEventListener('input', () => {
+  size = Number.parseInt(sizeSlider.value);
+  localStorage.setItem('size', `${size}`);
+  runVersion(currentVersion);
 });
 
 await runVersion(currentVersion);

@@ -3,9 +3,7 @@
   "version": "0.0.0",
   "description": "An example library for plotting/displaying data.",
   "exports": {
-    ".": "./v1.ts",
-    "./v2": "./v2.ts",
-    "./v3": "./v3.ts"
+    ".": "./index.ts"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

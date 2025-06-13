@@ -62,17 +62,28 @@ const mainFragment = tgpu["~unstable"].fragmentFn({
   return d.vec4f(0, 0, 0, 1);
 });
 
+// Holds the canvases that were already configured by the library.
+// Used mostly to avoid flicker when switching between versions.
+const configuredContexts = new WeakMap<HTMLCanvasElement, GPUCanvasContext>();
+
 export async function initXyz(root: TgpuRoot, options: Options) {
   const { target, pointSize = 0.001 } = options;
 
-  const context = target.getContext("webgpu") as GPUCanvasContext;
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
 
-  context.configure({
-    device: root.device,
-    format: presentationFormat,
-    alphaMode: "premultiplied",
-  });
+  const context = (() => {
+    if (configuredContexts.has(target)) {
+      return configuredContexts.get(target) as GPUCanvasContext;
+    }
+    const ctx = target.getContext("webgpu") as GPUCanvasContext;
+    ctx.configure({
+      device: root.device,
+      format: presentationFormat,
+      alphaMode: "premultiplied",
+    });
+    configuredContexts.set(target, ctx);
+    return ctx;
+  })();
 
   const pipeline = root["~unstable"]
     .with(staticPointSizeAccess, pointSize)

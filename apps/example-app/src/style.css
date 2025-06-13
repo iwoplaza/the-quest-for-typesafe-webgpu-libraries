@@ -116,6 +116,13 @@ button:focus-visible {
   }
 }
 
+#size-slider {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  z-index: 1001;
+}
+
 .stats-container {
   position: fixed;
   display: flex;

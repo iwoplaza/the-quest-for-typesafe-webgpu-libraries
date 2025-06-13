@@ -15,9 +15,9 @@ const mainCompute = tgpu["~unstable"].computeFn({
   workgroupSize: [1, 1],
   in: { gid: d.builtin.globalInvocationId },
 })(({ gid }) => {
-  const uv = d.vec2f(d.vec2u(gid.x, gid.y));
-  const o1 = perlin2d.sample(std.mul(0.01, uv)) * 50;
-  const o2 = perlin2d.sample(std.mul(0.1, uv)) * 5;
+  const uv = std.div(d.vec2f(d.vec2u(gid.x, gid.y)), d.f32(layout.$.size.x));
+  const o1 = perlin2d.sample(std.mul(20, uv)) * 50;
+  const o2 = perlin2d.sample(std.mul(200, uv)) * 5;
   layout.$.result[gid.x + gid.y * layout.$.size.x] = o1 + o2;
 });
 
