@@ -1,5 +1,5 @@
 import { generateHeightMap } from "abc-gen";
-import { initXyz } from "xyz-plot";
+import { initXyz } from "xyzplot";
 import { getCanvas, type VersionOptions } from "./helpers.ts";
 
 export default async function main({ root, size }: VersionOptions) {

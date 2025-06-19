@@ -1,7 +1,7 @@
 /// <reference types="@webgpu/types" />
 
 import { generateHeightMap } from "abc-gen/v2";
-import { initXyz } from "xyz-plot";
+import { initXyz } from "xyzplot";
 import { getCanvas, type VersionOptions } from "./helpers.ts";
 
 export default async function main({ root, size }: VersionOptions) {

@@ -5,7 +5,8 @@ import { mat4 } from "wgpu-matrix";
 
 export interface Options {
   target: HTMLCanvasElement;
-  pointSize?: number;
+  pointSize?: number | ((pos: d.v3f) => number);
+  color?: (pos: d.v3f) => d.v3f;
 }
 
 const PointsArray = (n: number) => d.arrayOf(d.vec3f, n);
@@ -16,6 +17,10 @@ const getPointSizeSlot = tgpu["~unstable"].slot(
   tgpu["~unstable"].fn([d.vec3f], d.f32)(() => staticPointSizeAccess.value),
 );
 
+const getColorSlot = tgpu["~unstable"].slot(
+  tgpu["~unstable"].fn([d.vec3f], d.vec3f)(() => d.vec3f(0, 0, 0))
+);
+
 const layout = tgpu.bindGroupLayout({
   viewProj: { uniform: d.mat4x4f },
   points: { storage: PointsArray, access: "readonly" },
@@ -23,7 +28,7 @@ const layout = tgpu.bindGroupLayout({
 
 const mainVertex = tgpu["~unstable"].vertexFn({
   in: { vid: d.builtin.vertexIndex, iid: d.builtin.instanceIndex },
-  out: { pos: d.builtin.position, uv: d.vec2f },
+  out: { pos: d.builtin.position, uv: d.vec2f, gpos: d.vec3f },
 })((input) => {
   const point = layout.$.points[input.iid]!;
 
@@ -48,18 +53,19 @@ const mainVertex = tgpu["~unstable"].vertexFn({
   return {
     pos: std.mul(layout.$.viewProj, d.vec4f(globalPos, 1.0)),
     uv: uv[input.vid]!,
+    gpos: globalPos,
   };
 });
 
 const mainFragment = tgpu["~unstable"].fragmentFn({
-  in: { uv: d.vec2f },
+  in: { uv: d.vec2f, gpos: d.vec3f },
   out: d.vec4f,
 })((input) => {
   const distToCenter = std.distance(input.uv, d.vec2f(0.5, 0.5)) * 2;
   if (distToCenter > 1) {
     std.discard();
   }
-  return d.vec4f(0, 0, 0, 1);
+  return d.vec4f(getColorSlot.value(input.gpos), 1);
 });
 
 // Holds the canvases that were already configured by the library.
@@ -67,7 +73,7 @@ const mainFragment = tgpu["~unstable"].fragmentFn({
 const configuredContexts = new WeakMap<HTMLCanvasElement, GPUCanvasContext>();
 
 export async function initXyz(root: TgpuRoot, options: Options) {
-  const { target, pointSize = 0.001 } = options;
+  const { target, pointSize = 0.001, color } = options;
 
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
 
@@ -85,8 +91,21 @@ export async function initXyz(root: TgpuRoot, options: Options) {
     return ctx;
   })();
 
-  const pipeline = root["~unstable"]
-    .with(staticPointSizeAccess, pointSize)
+  const getPointSize = typeof pointSize === 'function' ? tgpu["~unstable"].fn([d.vec3f], d.f32)(pointSize) : undefined;
+  const getColor = color ? tgpu["~unstable"].fn([d.vec3f], d.vec3f)(color) : undefined;
+
+  const pipeline = (() => {
+      let pipeline: any = root["~unstable"];
+      if (getPointSize) {
+        pipeline = pipeline.with(getPointSizeSlot, getPointSize);
+      } else {
+        pipeline = pipeline.with(staticPointSizeAccess, pointSize as number);
+      }
+      if (getColor) {
+        pipeline = pipeline.with(getColorSlot, getColor);
+      }
+      return pipeline;
+    })()
     .withVertex(mainVertex, {})
     .withFragment(mainFragment, { format: presentationFormat })
     .withPrimitive({ topology: "triangle-strip" })
@@ -103,6 +122,8 @@ export async function initXyz(root: TgpuRoot, options: Options) {
     usage: GPUTextureUsage.RENDER_ATTACHMENT,
   });
   const depthView = depthTexture.createView();
+
+  console.log(tgpu.resolve({ externals: { mainFragment } }));
 
   async function plot3d(
     points:

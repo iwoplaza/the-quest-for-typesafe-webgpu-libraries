@@ -1,5 +1,5 @@
 {
-  "name": "xyz-plot",
+  "name": "xyzplot",
   "version": "0.0.0",
   "description": "An example library for plotting/displaying data.",
   "exports": {

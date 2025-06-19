@@ -9,7 +9,7 @@ const versionRunners = {
   "1": await import("./1-through-cpu.ts").then((m) => m.default),
   "2": await import("./2-gpu.ts").then((m) => m.default),
   "3": await import("./3-tgsl.ts").then((m) => m.default),
-  "4": await import("./3-tgsl.ts").then((m) => m.default), // TODO: Implement version 4
+  "4": await import("./4-customizable.ts").then((m) => m.default),
 };
 
 const versionButtons = {

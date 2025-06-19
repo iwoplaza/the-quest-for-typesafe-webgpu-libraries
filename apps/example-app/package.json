@@ -12,7 +12,7 @@
     "abc-gen": "workspace:",
     "remeda": "^2.22.5",
     "typegpu": "catalog:",
-    "xyz-plot": "workspace:"
+    "xyzplot": "workspace:"
   },
   "devDependencies": {
     "typescript": "catalog:",

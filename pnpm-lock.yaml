@@ -45,9 +45,9 @@ importers:
       typegpu:
         specifier: 'catalog:'
         version: 0.5.8
-      xyz-plot:
+      xyzplot:
         specifier: 'workspace:'
-        version: link:../../packages/xyz-plot
+        version: link:../../packages/xyzplot
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -75,7 +75,7 @@ importers:
         specifier: 'catalog:'
         version: 0.1.61
 
-  packages/xyz-plot:
+  packages/xyzplot:
     dependencies:
       typegpu:
         specifier: 'catalog:'
