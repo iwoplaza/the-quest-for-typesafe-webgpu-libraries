@@ -18,7 +18,7 @@ const getPointSizeSlot = tgpu["~unstable"].slot(
 );
 
 const getColorSlot = tgpu["~unstable"].slot(
-  tgpu["~unstable"].fn([d.vec3f], d.vec3f)(() => d.vec3f(0, 0, 0))
+  tgpu["~unstable"].fn([d.vec3f], d.vec3f)(() => d.vec3f(0, 0, 0)),
 );
 
 const layout = tgpu.bindGroupLayout({
@@ -91,21 +91,25 @@ export async function initXyz(root: TgpuRoot, options: Options) {
     return ctx;
   })();
 
-  const getPointSize = typeof pointSize === 'function' ? tgpu["~unstable"].fn([d.vec3f], d.f32)(pointSize) : undefined;
-  const getColor = color ? tgpu["~unstable"].fn([d.vec3f], d.vec3f)(color) : undefined;
+  const getPointSize = typeof pointSize === "function"
+    ? tgpu["~unstable"].fn([d.vec3f], d.f32)(pointSize)
+    : undefined;
+  const getColor = color
+    ? tgpu["~unstable"].fn([d.vec3f], d.vec3f)(color)
+    : undefined;
 
   const pipeline = (() => {
-      let pipeline: any = root["~unstable"];
-      if (getPointSize) {
-        pipeline = pipeline.with(getPointSizeSlot, getPointSize);
-      } else {
-        pipeline = pipeline.with(staticPointSizeAccess, pointSize as number);
-      }
-      if (getColor) {
-        pipeline = pipeline.with(getColorSlot, getColor);
-      }
-      return pipeline;
-    })()
+    let pipeline: any = root["~unstable"];
+    if (getPointSize) {
+      pipeline = pipeline.with(getPointSizeSlot, getPointSize);
+    } else {
+      pipeline = pipeline.with(staticPointSizeAccess, pointSize as number);
+    }
+    if (getColor) {
+      pipeline = pipeline.with(getColorSlot, getColor);
+    }
+    return pipeline;
+  })()
     .withVertex(mainVertex, {})
     .withFragment(mainFragment, { format: presentationFormat })
     .withPrimitive({ topology: "triangle-strip" })
@@ -206,7 +210,7 @@ export async function initXyz(root: TgpuRoot, options: Options) {
 
     await root.device.queue.onSubmittedWorkDone();
 
-    performance.measure('🫐 upload', { start: uploadStart });
+    performance.measure("🫐 upload", { start: uploadStart });
 
     if (ownBuffer) {
       // We created the buffer, so we destroy it.
@@ -214,7 +218,6 @@ export async function initXyz(root: TgpuRoot, options: Options) {
     }
 
     viewProjBuffer.destroy();
-
   }
 
   return {
