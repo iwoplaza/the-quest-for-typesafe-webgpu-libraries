@@ -3,8 +3,8 @@ packages:
   - "apps/*"
 
 catalog:
-  typegpu: ^0.5.8
-  unplugin-typegpu: ^0.1.2
+  typegpu: ^0.6.0
+  unplugin-typegpu: ^0.2.0
   typescript: ^5.8.3
   vite: ^6.3.5
   "@webgpu/types": ^0.1.61

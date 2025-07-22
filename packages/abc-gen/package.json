@@ -13,7 +13,7 @@
   "author": "Iwo Plaza",
   "license": "MIT",
   "dependencies": {
-    "@typegpu/noise": "^0.0.8",
+    "@typegpu/noise": "^0.1.0",
     "typegpu": "catalog:",
     "unplugin-typegpu": "catalog:"
   },

@@ -7,7 +7,7 @@ export interface VersionOptions {
 }
 
 export function dispatch2d(root: TgpuRoot, size: readonly [number, number], callback: (x: number, y: number) => void): void {
-  const wrappedCallback = tgpu["~unstable"].fn([u32, u32])(callback);
+  const wrappedCallback = tgpu.fn([u32, u32])(callback);
 
   const mainCompute = tgpu["~unstable"].computeFn({
     workgroupSize: [1, 1],

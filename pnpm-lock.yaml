@@ -10,14 +10,14 @@ catalogs:
       specifier: ^0.1.61
       version: 0.1.61
     typegpu:
-      specifier: ^0.5.8
-      version: 0.5.8
+      specifier: ^0.6.0
+      version: 0.6.0
     typescript:
       specifier: ^5.8.3
       version: 5.8.3
     unplugin-typegpu:
-      specifier: ^0.1.2
-      version: 0.1.2
+      specifier: ^0.2.0
+      version: 0.2.0
     vite:
       specifier: ^6.3.5
       version: 6.3.5
@@ -44,7 +44,7 @@ importers:
         version: 2.22.5
       typegpu:
         specifier: 'catalog:'
-        version: 0.5.8
+        version: 0.6.0
       xyzplot:
         specifier: 'workspace:'
         version: link:../../packages/xyzplot
@@ -54,7 +54,7 @@ importers:
         version: 5.8.3
       unplugin-typegpu:
         specifier: 'catalog:'
-        version: 0.1.2(typegpu@0.5.8)
+        version: 0.2.0(typegpu@0.6.0)
       vite:
         specifier: 'catalog:'
         version: 6.3.5
@@ -62,14 +62,14 @@ importers:
   packages/abc-gen:
     dependencies:
       '@typegpu/noise':
-        specifier: ^0.0.8
-        version: 0.0.8(typegpu@0.5.8)
+        specifier: ^0.1.0
+        version: 0.1.0(typegpu@0.6.0)
       typegpu:
         specifier: 'catalog:'
-        version: 0.5.8
+        version: 0.6.0
       unplugin-typegpu:
         specifier: 'catalog:'
-        version: 0.1.2(typegpu@0.5.8)
+        version: 0.2.0(typegpu@0.6.0)
     devDependencies:
       '@webgpu/types':
         specifier: 'catalog:'
@@ -79,10 +79,10 @@ importers:
     dependencies:
       typegpu:
         specifier: 'catalog:'
-        version: 0.5.8
+        version: 0.6.0
       unplugin-typegpu:
         specifier: 'catalog:'
-        version: 0.1.2(typegpu@0.5.8)
+        version: 0.2.0(typegpu@0.6.0)
       wgpu-matrix:
         specifier: ^3.4.0
         version: 3.4.0
@@ -350,10 +350,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@typegpu/noise@0.0.8':
-    resolution: {integrity: sha512-bl6kN1YgCuaFEIh/vx4q1Hdx5X6AUPwQVinMzWCRC8XnPmFWfuUclr544IA8pvokgQDuIQH5IJAnNCILUCnwJw==}
+  '@typegpu/noise@0.1.0':
+    resolution: {integrity: sha512-94CQfZhsszv/FEsKdhswa5yWTM0VQIuum4myNuPSDyHKyJfE86xnJPF8LvNPhmYOPkMpY2czyKFVh0CG90fEfw==}
     peerDependencies:
-      typegpu: ^0.5.8
+      typegpu: ^0.6.0
 
   '@types/estree@1.0.7':
     resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
@@ -444,8 +444,8 @@ packages:
   typed-binary@4.3.2:
     resolution: {integrity: sha512-HT3pIBM2njCZUmeczDaQUUErGiM6GXFCqMsHegE12HCoBtvHCkfR10JJni0TeGOTnLilTd6YFyj+YhflqQDrDQ==}
 
-  typegpu@0.5.8:
-    resolution: {integrity: sha512-4uyIxeY61YFYIrq8Cxt/RyuRg0BSO0VfP3EzCepGK+xpdtq7erlhg+42P2Eo1GUV2zrcvZEvupFeBN4BAwDahw==}
+  typegpu@0.6.0:
+    resolution: {integrity: sha512-ESfD+u5z7yDuQq6C4JeKszKmh+8IU6pgAXXPMp+rWnDNjz+UlGiLzMuFHtvSfUoTIedsg5bH18merMmzyLWeZg==}
     engines: {node: '>=12.20.0'}
 
   typescript@5.8.3:
@@ -453,10 +453,10 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  unplugin-typegpu@0.1.2:
-    resolution: {integrity: sha512-3YhpY+8TjdwvTTSxek7OqyeGOOkdfuy4eIuQd/gk0sJcS55UycKXrMUdiED+N8XSTgv8UGpSZplrMhtDjOnkTQ==}
+  unplugin-typegpu@0.2.0:
+    resolution: {integrity: sha512-MqyoNR2sS5cYUg3pw75FCR/0UW/8p4GPpCMGu+8ufB554llbYKZxJzNVvHQDzIf8zE01mH43SXt7y75G8+jwbQ==}
     peerDependencies:
-      typegpu: ^0.5.8
+      typegpu: ^0.6.0
 
   unplugin@2.3.5:
     resolution: {integrity: sha512-RyWSb5AHmGtjjNQ6gIlA67sHOsWpsbWpwDokLwTcejVdOjEkJZh7QKu14J00gDDVSh8kGH4KYC/TNBceXFZhtw==}
@@ -649,9 +649,9 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.41.1':
     optional: true
 
-  '@typegpu/noise@0.0.8(typegpu@0.5.8)':
+  '@typegpu/noise@0.1.0(typegpu@0.6.0)':
     dependencies:
-      typegpu: 0.5.8
+      typegpu: 0.6.0
 
   '@types/estree@1.0.7': {}
 
@@ -767,22 +767,23 @@ snapshots:
 
   typed-binary@4.3.2: {}
 
-  typegpu@0.5.8:
+  typegpu@0.6.0:
     dependencies:
       tinyest: 0.1.1
       typed-binary: 4.3.2
 
   typescript@5.8.3: {}
 
-  unplugin-typegpu@0.1.2(typegpu@0.5.8):
+  unplugin-typegpu@0.2.0(typegpu@0.6.0):
     dependencies:
       '@babel/standalone': 7.27.4
       defu: 6.1.4
       estree-walker: 3.0.3
       magic-string-ast: 0.9.1
       picomatch: 4.0.2
+      tinyest: 0.1.1
       tinyest-for-wgsl: 0.1.2
-      typegpu: 0.5.8
+      typegpu: 0.6.0
       unplugin: 2.3.5
 
   unplugin@2.3.5:

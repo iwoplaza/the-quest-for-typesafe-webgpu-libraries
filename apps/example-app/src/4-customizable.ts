@@ -3,27 +3,21 @@ import { arrayOf, vec3f } from "typegpu/data";
 import { generateHeightMap } from "abc-gen/v3";
 import { initXyz } from "xyzplot";
 import { dispatch2d, getCanvas, type VersionOptions } from "./helpers.ts";
-import { sin } from "typegpu/std";
+import { abs, sin } from "typegpu/std";
 tgpu;
 
 export default async function main({ root, size }: VersionOptions) {
   const SIZE = 2 ** size;
 
-  // A library can accept more than just config
-  // values... it can accept behavior!
-  //
-  // Here's an example of a "plotting" library,
-  // allowing users to alter the size and color
-  // of each point based on its position.
   const xyz = await initXyz(root, {
     target: getCanvas(),
     pointSize: (pos) => {
       "kernel";
-      return sin(pos.x * 20) * 0.002;
+      return abs(sin(pos.x * 10 + pos.z * 20)) * 0.01;
     },
     color: (pos) => {
       "kernel";
-      return vec3f(1, sin(pos.z * 10), 0);
+      return vec3f(sin(pos.z), 0, sin(pos.z + 2));
     },
   });
 

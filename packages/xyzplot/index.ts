@@ -13,12 +13,12 @@ const PointsArray = (n: number) => d.arrayOf(d.vec3f, n);
 
 const staticPointSizeAccess = tgpu["~unstable"].accessor(d.f32);
 
-const getPointSizeSlot = tgpu["~unstable"].slot(
-  tgpu["~unstable"].fn([d.vec3f], d.f32)(() => staticPointSizeAccess.value),
+const getPointSizeSlot = tgpu.slot(
+  tgpu.fn([d.vec3f], d.f32)(() => staticPointSizeAccess.value),
 );
 
-const getColorSlot = tgpu["~unstable"].slot(
-  tgpu["~unstable"].fn([d.vec3f], d.vec3f)(() => d.vec3f(0, 0, 0)),
+const getColorSlot = tgpu.slot(
+  tgpu.fn([d.vec3f], d.vec3f)(() => d.vec3f(0, 0, 0)),
 );
 
 const layout = tgpu.bindGroupLayout({
@@ -92,24 +92,20 @@ export async function initXyz(root: TgpuRoot, options: Options) {
   })();
 
   const getPointSize = typeof pointSize === "function"
-    ? tgpu["~unstable"].fn([d.vec3f], d.f32)(pointSize)
+    ? tgpu.fn([d.vec3f], d.f32)(pointSize)
     : undefined;
   const getColor = color
-    ? tgpu["~unstable"].fn([d.vec3f], d.vec3f)(color)
+    ? tgpu.fn([d.vec3f], d.vec3f)(color)
     : undefined;
 
-  const pipeline = (() => {
-    let pipeline: any = root["~unstable"];
-    if (getPointSize) {
-      pipeline = pipeline.with(getPointSizeSlot, getPointSize);
-    } else {
-      pipeline = pipeline.with(staticPointSizeAccess, pointSize as number);
-    }
-    if (getColor) {
-      pipeline = pipeline.with(getColorSlot, getColor);
-    }
-    return pipeline;
-  })()
+  const pipeline = root["~unstable"]
+    .pipe((cfg) => {
+      if (getPointSize) {
+        return cfg.with(getPointSizeSlot, getPointSize);
+      }
+      return cfg.with(staticPointSizeAccess, pointSize as number);
+    })
+    .pipe((cfg) => getColor ? cfg.with(getColorSlot, getColor) : cfg)
     .withVertex(mainVertex, {})
     .withFragment(mainFragment, { format: presentationFormat })
     .withPrimitive({ topology: "triangle-strip" })
