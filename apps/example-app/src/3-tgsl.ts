@@ -39,10 +39,17 @@ export default async function main({ root, size }: VersionOptions) {
   await root.device.queue.onSubmittedWorkDone();
   performance.measure('🫐 transform', { start: transformStart });
 
-  await xyz.plot3d(pointsBuffer);
+  let handle: number;
+  function frame(timestamp: number) {
+    xyz.cameraPosition = vec3f(0, 0, -timestamp * 0.0001);
+    xyz.plot3d(pointsBuffer);
+    handle = requestAnimationFrame(frame);
+  }
+  handle = requestAnimationFrame(frame);
 
   // Cleanup function
   return () => {
+    cancelAnimationFrame(handle);
     xyz.destroy();
   };
 }

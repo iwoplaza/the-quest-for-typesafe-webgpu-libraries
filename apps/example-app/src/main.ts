@@ -1,9 +1,9 @@
 import tgpu from "typegpu";
 import "./style.css";
-import { filter, join, map, pipe } from 'remeda';
+import { filter, join, map, pipe } from "remeda";
 
-const stats = document.getElementById('stats') as HTMLDivElement;
-const sizeSlider = document.getElementById('size-slider') as HTMLInputElement;
+const stats = document.getElementById("stats") as HTMLDivElement;
+const sizeSlider = document.getElementById("size-slider") as HTMLInputElement;
 
 const versionRunners = {
   "1": await import("./1-through-cpu.ts").then((m) => m.default),
@@ -32,9 +32,9 @@ let currentVersion = Number.parseInt(localStorage.getItem("version") ?? "1") as
 let cleanup: (() => void) | undefined;
 async function runVersion(v: 1 | 2 | 3 | 4): Promise<void> {
   cleanup?.();
-  stats.innerHTML = '';
+  stats.innerHTML = "";
   currentVersion = v;
-  localStorage.setItem('version', `${v}`);
+  localStorage.setItem("version", `${v}`);
 
   const start = performance.now();
   performance.mark(`version start`);
@@ -48,15 +48,16 @@ async function runVersion(v: 1 | 2 | 3 | 4): Promise<void> {
 
   stats.innerHTML = pipe(
     performance.getEntries(),
-    filter((e) =>
-      e.name.startsWith("🫐") && e.startTime >= start
+    filter((e) => e.name.startsWith("🫐") && e.startTime >= start),
+    map(
+      (entry) =>
+        `<li><span style="display: inline-block; min-width: 7em">${entry.name}:</span> ${entry.duration.toFixed(3)} ms</li>`,
     ),
-    map((entry) => `<li><span style="display: inline-block; min-width: 7em">${entry.name}:</span> ${entry.duration.toFixed(3)} ms</li>`),
-    join(''),
+    join(""),
   );
 
   Object.values(versionButtons).forEach((btn) =>
-    btn.classList.remove("active")
+    btn.classList.remove("active"),
   );
   versionButtons[v].classList.add("active");
 }
@@ -67,9 +68,9 @@ Object.entries(versionButtons).forEach(([v, btn]) => {
   });
 });
 
-sizeSlider.addEventListener('input', () => {
+sizeSlider.addEventListener("input", () => {
   size = Number.parseInt(sizeSlider.value);
-  localStorage.setItem('size', `${size}`);
+  localStorage.setItem("size", `${size}`);
   runVersion(currentVersion);
 });
 

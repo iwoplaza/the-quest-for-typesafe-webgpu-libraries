@@ -75,6 +75,8 @@ const configuredContexts = new WeakMap<HTMLCanvasElement, GPUCanvasContext>();
 export async function initXyz(root: TgpuRoot, options: Options) {
   const { target, pointSize = 0.001, color } = options;
 
+  const cameraPosition = d.vec3f();
+
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
 
   const context = (() => {
@@ -123,8 +125,6 @@ export async function initXyz(root: TgpuRoot, options: Options) {
   });
   const depthView = depthTexture.createView();
 
-  console.log(tgpu.resolve({ externals: { mainFragment } }));
-
   async function plot3d(
     points:
       | readonly (readonly [number, number, number])[]
@@ -132,14 +132,14 @@ export async function initXyz(root: TgpuRoot, options: Options) {
       | GPUBuffer,
   ): Promise<void> {
     const viewMat = mat4.lookAt(
-      d.vec3f(0, 0.5, 1.5),
-      d.vec3f(0),
+      std.add(cameraPosition, d.vec3f(0, 0.5, 1.5)),
+      std.add(cameraPosition, d.vec3f(0)),
       d.vec3f(0, 1, 0),
       d.mat4x4f(),
     );
     const projMat = mat4.perspective(
       60 / 180 * Math.PI,
-      1,
+      target.width / target.height,
       0.001,
       1000,
       d.mat4x4f(),
@@ -218,6 +218,11 @@ export async function initXyz(root: TgpuRoot, options: Options) {
 
   return {
     plot3d,
+    set cameraPosition(v: d.v3f) {
+      cameraPosition.x = v.x;
+      cameraPosition.y = v.y;
+      cameraPosition.z = v.z;
+    },
     destroy() {
       depthTexture.destroy();
     },
