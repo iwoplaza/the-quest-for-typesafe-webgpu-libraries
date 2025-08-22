@@ -6,18 +6,21 @@ settings:
 
 catalogs:
   default:
+    '@typegpu/noise':
+      specifier: ^0.7.0
+      version: 0.7.0
     '@webgpu/types':
       specifier: ^0.1.61
       version: 0.1.61
     typegpu:
-      specifier: ^0.6.0
-      version: 0.6.0
+      specifier: ^0.7.1
+      version: 0.7.1
     typescript:
       specifier: ^5.8.3
       version: 5.8.3
     unplugin-typegpu:
-      specifier: ^0.2.0
-      version: 0.2.0
+      specifier: ^0.2.2
+      version: 0.2.2
     vite:
       specifier: ^6.3.5
       version: 6.3.5
@@ -36,6 +39,9 @@ importers:
 
   apps/example-app:
     dependencies:
+      '@typegpu/noise':
+        specifier: 'catalog:'
+        version: 0.7.0(typegpu@0.7.1)
       abc-gen:
         specifier: 'workspace:'
         version: link:../../packages/abc-gen
@@ -44,7 +50,7 @@ importers:
         version: 2.22.5
       typegpu:
         specifier: 'catalog:'
-        version: 0.6.0
+        version: 0.7.1
       xyzplot:
         specifier: 'workspace:'
         version: link:../../packages/xyzplot
@@ -54,7 +60,7 @@ importers:
         version: 5.8.3
       unplugin-typegpu:
         specifier: 'catalog:'
-        version: 0.2.0(typegpu@0.6.0)
+        version: 0.2.2(typegpu@0.7.1)
       vite:
         specifier: 'catalog:'
         version: 6.3.5
@@ -63,13 +69,13 @@ importers:
     dependencies:
       '@typegpu/noise':
         specifier: ^0.1.0
-        version: 0.1.0(typegpu@0.6.0)
+        version: 0.1.0(typegpu@0.7.1)
       typegpu:
         specifier: 'catalog:'
-        version: 0.6.0
+        version: 0.7.1
       unplugin-typegpu:
         specifier: 'catalog:'
-        version: 0.2.0(typegpu@0.6.0)
+        version: 0.2.2(typegpu@0.7.1)
     devDependencies:
       '@webgpu/types':
         specifier: 'catalog:'
@@ -79,10 +85,10 @@ importers:
     dependencies:
       typegpu:
         specifier: 'catalog:'
-        version: 0.6.0
+        version: 0.7.1
       unplugin-typegpu:
         specifier: 'catalog:'
-        version: 0.2.0(typegpu@0.6.0)
+        version: 0.2.2(typegpu@0.7.1)
       wgpu-matrix:
         specifier: ^3.4.0
         version: 3.4.0
@@ -355,6 +361,11 @@ packages:
     peerDependencies:
       typegpu: ^0.6.0
 
+  '@typegpu/noise@0.7.0':
+    resolution: {integrity: sha512-4q3lN/m0F1pLKz0bJjTj8ukPl0uYsd5EWT4WjauXf19oQrGoHaHIO2lVkTkYTzOvjKf7WvDoSo/MIwv86DxZTg==}
+    peerDependencies:
+      typegpu: ^0.7.0
+
   '@types/estree@1.0.7':
     resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
 
@@ -390,8 +401,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  magic-string-ast@0.9.1:
-    resolution: {integrity: sha512-18dv2ZlSSgJ/jDWlZGKfnDJx56ilNlYq9F7NnwuWTErsmYmqJ2TWE4l1o2zlUHBYUGBy3tIhPCC1gxq8M5HkMA==}
+  magic-string-ast@1.0.0:
+    resolution: {integrity: sha512-8rbuNizut2gW94kv7pqgt0dvk+AHLPVIm0iJtpSgQJ9dx21eWx5SBel8z3jp1xtC0j6/iyK3AWGhAR1H61s7LA==}
     engines: {node: '>=20.18.0'}
 
   magic-string@0.30.17:
@@ -402,11 +413,18 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  pathe@2.0.3:
+    resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
+
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
   picomatch@4.0.2:
     resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
+    engines: {node: '>=12'}
+
+  picomatch@4.0.3:
+    resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
     engines: {node: '>=12'}
 
   postcss@8.5.4:
@@ -444,8 +462,8 @@ packages:
   typed-binary@4.3.2:
     resolution: {integrity: sha512-HT3pIBM2njCZUmeczDaQUUErGiM6GXFCqMsHegE12HCoBtvHCkfR10JJni0TeGOTnLilTd6YFyj+YhflqQDrDQ==}
 
-  typegpu@0.6.0:
-    resolution: {integrity: sha512-ESfD+u5z7yDuQq6C4JeKszKmh+8IU6pgAXXPMp+rWnDNjz+UlGiLzMuFHtvSfUoTIedsg5bH18merMmzyLWeZg==}
+  typegpu@0.7.1:
+    resolution: {integrity: sha512-PyP/ZRsX8lCX27fNzBE5TjwxC8Vj88RcLlCv4VXg5sVd6gBuiPZTJQoC5HR15hjTJoRAfayT/TXQ4phWOkA/aA==}
     engines: {node: '>=12.20.0'}
 
   typescript@5.8.3:
@@ -453,10 +471,10 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  unplugin-typegpu@0.2.0:
-    resolution: {integrity: sha512-MqyoNR2sS5cYUg3pw75FCR/0UW/8p4GPpCMGu+8ufB554llbYKZxJzNVvHQDzIf8zE01mH43SXt7y75G8+jwbQ==}
+  unplugin-typegpu@0.2.2:
+    resolution: {integrity: sha512-5pbwv0cTMRMxRCQXEPAMUsUoAKMQsz2B4zlhpRRHNy3qtMk+rP3Uxe/5zZUtr2yAASCVO2iciblH5HqcUoijjQ==}
     peerDependencies:
-      typegpu: ^0.6.0
+      typegpu: ^0.7.0
 
   unplugin@2.3.5:
     resolution: {integrity: sha512-RyWSb5AHmGtjjNQ6gIlA67sHOsWpsbWpwDokLwTcejVdOjEkJZh7QKu14J00gDDVSh8kGH4KYC/TNBceXFZhtw==}
@@ -649,9 +667,13 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.41.1':
     optional: true
 
-  '@typegpu/noise@0.1.0(typegpu@0.6.0)':
+  '@typegpu/noise@0.1.0(typegpu@0.7.1)':
     dependencies:
-      typegpu: 0.6.0
+      typegpu: 0.7.1
+
+  '@typegpu/noise@0.7.0(typegpu@0.7.1)':
+    dependencies:
+      typegpu: 0.7.1
 
   '@types/estree@1.0.7': {}
 
@@ -700,7 +722,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  magic-string-ast@0.9.1:
+  magic-string-ast@1.0.0:
     dependencies:
       magic-string: 0.30.17
 
@@ -710,9 +732,13 @@ snapshots:
 
   nanoid@3.3.11: {}
 
+  pathe@2.0.3: {}
+
   picocolors@1.1.1: {}
 
   picomatch@4.0.2: {}
+
+  picomatch@4.0.3: {}
 
   postcss@8.5.4:
     dependencies:
@@ -767,29 +793,30 @@ snapshots:
 
   typed-binary@4.3.2: {}
 
-  typegpu@0.6.0:
+  typegpu@0.7.1:
     dependencies:
       tinyest: 0.1.1
       typed-binary: 4.3.2
 
   typescript@5.8.3: {}
 
-  unplugin-typegpu@0.2.0(typegpu@0.6.0):
+  unplugin-typegpu@0.2.2(typegpu@0.7.1):
     dependencies:
       '@babel/standalone': 7.27.4
       defu: 6.1.4
       estree-walker: 3.0.3
-      magic-string-ast: 0.9.1
-      picomatch: 4.0.2
+      magic-string-ast: 1.0.0
+      pathe: 2.0.3
+      picomatch: 4.0.3
       tinyest: 0.1.1
       tinyest-for-wgsl: 0.1.2
-      typegpu: 0.6.0
+      typegpu: 0.7.1
       unplugin: 2.3.5
 
   unplugin@2.3.5:
     dependencies:
       acorn: 8.14.1
-      picomatch: 4.0.2
+      picomatch: 4.0.3
       webpack-virtual-modules: 0.6.2
 
   vite@6.3.5:

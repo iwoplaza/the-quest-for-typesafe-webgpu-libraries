@@ -1,10 +1,8 @@
-import tgpu from "typegpu";
-import { arrayOf, vec3f } from "typegpu/data";
 import { generateHeightMap } from "abc-gen/v3";
+import { arrayOf, vec3f } from "typegpu/data";
+import { abs, sin } from "typegpu/std";
 import { initXyz } from "xyzplot";
 import { dispatch2d, getCanvas, type VersionOptions } from "./helpers.ts";
-import { abs, sin } from "typegpu/std";
-tgpu;
 
 export default async function main({ root, size }: VersionOptions) {
   const SIZE = 2 ** size;
@@ -25,11 +23,10 @@ export default async function main({ root, size }: VersionOptions) {
   const terrain = generateHeightMap(root, [SIZE, SIZE]).as("readonly");
   await root.device.queue.onSubmittedWorkDone();
   performance.measure("🫐 generating", { start: genStart });
-  //    ^?
 
-  const pointsBuffer = root.createBuffer(arrayOf(vec3f, SIZE * SIZE)).$usage(
-    "storage",
-  );
+  const pointsBuffer = root
+    .createBuffer(arrayOf(vec3f, SIZE * SIZE))
+    .$usage("storage");
   const points = pointsBuffer.as("mutable");
 
   const s = 1 / (SIZE - 1);

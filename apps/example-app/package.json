@@ -12,6 +12,7 @@
     "abc-gen": "workspace:",
     "remeda": "^2.22.5",
     "typegpu": "catalog:",
+    "@typegpu/noise": "catalog:",
     "xyzplot": "workspace:"
   },
   "devDependencies": {
